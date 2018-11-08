@@ -12,9 +12,10 @@ export default class Game extends React.Component {
         this.state = {
             count : 0,
             guesses : [],
-            curGuess : null,
+            curGuess : '',
             feedback: "Make your guess!", 
-            targetNum : Math.floor(Math.random() * 100)
+            targetNum : Math.floor(Math.random() * 100),
+            info : false
         }
     }
 
@@ -24,6 +25,12 @@ export default class Game extends React.Component {
             count : (this.state.count + 1), 
             guesses : ([...this.state.guesses, guess])
         }, this.converStuff)
+    }
+
+    handleInfo() {
+        this.setState({
+            info: !this.state.info
+        })
     }
 
     converStuff(){ 
@@ -42,12 +49,24 @@ export default class Game extends React.Component {
         this.setState({feedback : temperature}); 
     }
 
+    newGame () {
+        this.setState({
+            count : 0,
+            guesses : [],
+            curGuess : '',
+            feedback: "Make your guess!", 
+            targetNum : Math.floor(Math.random() * 100),
+            info : false
+        })
+    }
+
 
     render() {
 
+        
         return (
             <div>
-                <Header />
+                <Header handleNewGame={() => this.newGame()}info={this.state.info} handleInfo={() => this.handleInfo()}/>
                 <GuessSection feedback={this.state.feedback} handleGuess={(guess) => this.handleGuess(guess)} />
                 <GuessCount count={this.state.count} />
                 <GuessList guesses={this.state.guesses} />
