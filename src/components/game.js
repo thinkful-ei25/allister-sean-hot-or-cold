@@ -10,17 +10,36 @@ export default class Game extends React.Component {
         super(props);
 
         this.state = {
-            count : 3,
-            guesses : [10, 15, 25],
+            count : 0,
+            guesses : [],
             curGuess : null,
-            feedback: "Make your guess!"
+            feedback: "Make your guess!", 
+            targetNum : Math.floor(Math.random() * 100)
         }
     }
 
     handleGuess(guess) {
-        this.setState( {
-            curGuess : guess
-        })
+        this.setState({
+            curGuess : guess,
+            count : (this.state.count + 1), 
+            guesses : ([...this.state.guesses, guess])
+        }, this.converStuff)
+    }
+
+    converStuff(){ 
+        const diff = 
+            (Math.abs(Number(this.state.targetNum) - Number(this.state.curGuess))); 
+        
+        let temperature; 
+        if (diff <= 5 && diff !== 0){ 
+            temperature = 'hot'
+        } else if (diff === 0) { 
+            temperature = 'correct'
+        } else { 
+            temperature = 'cold'; 
+        }
+        
+        this.setState({feedback : temperature}); 
     }
 
 
